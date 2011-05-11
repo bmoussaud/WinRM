@@ -11,9 +11,6 @@ This manual describes the WinRM plugin.
 The Windows Remote Management (WinRM) is the Microsoft implementation of WS-Management Protocol, a standard Simple Object Access Protocol (SOAP)-based, firewall-friendly protocol that allows hardware and operating systems, from different vendors, to interoperate.
 This plugin allows Deployit to become a WinRM client to run remote commands on the server.
 
-??? which files ???
-??? logic in keys ???
-
 # Plugin Requirements #
 
 In addition to the requirements for Deployit, the Dictionary Plugin has the following additional requirements:
