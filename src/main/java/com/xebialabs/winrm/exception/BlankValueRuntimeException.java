@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with WinRM.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.xebialabs.deployit.hostsession.cifs.winrm.exception;
+package com.xebialabs.winrm.exception;
 
 public class BlankValueRuntimeException extends RuntimeException {
 	public BlankValueRuntimeException(String message) {

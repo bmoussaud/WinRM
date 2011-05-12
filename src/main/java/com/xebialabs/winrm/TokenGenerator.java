@@ -14,20 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with WinRM.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.xebialabs.deployit.hostsession.cifs.winrm;
+package com.xebialabs.winrm;
 
 
-public enum SoapAction {
+public interface TokenGenerator {
 
-	COMMAND_LINE("CommandLine"), RECEIVE("Receive"), SIGNAL("Signal"), SHELL("Shell");
-
-	private final String value;
-
-	SoapAction(String value) {
-		this.value = value;
-	}
-
-	public String getValue() {
-		return value;
-	}
+	public String generateToken();
 }

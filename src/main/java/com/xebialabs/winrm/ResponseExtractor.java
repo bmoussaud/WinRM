@@ -14,14 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with WinRM.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.xebialabs.deployit.hostsession.cifs.winrm;
+package com.xebialabs.winrm;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Namespace;
 import org.dom4j.XPath;
 import org.jaxen.SimpleNamespaceContext;
-
-import static com.xebialabs.deployit.hostsession.cifs.winrm.WinRMURI.NS_WIN_SHELL;
 
 /**
  */
@@ -39,7 +37,7 @@ public enum ResponseExtractor {
 	private final SimpleNamespaceContext namespaceContext;
 
 	ResponseExtractor(String expr) {
-		this(expr, NS_WIN_SHELL);
+		this(expr, WinRMURI.NS_WIN_SHELL);
 	}
 
 

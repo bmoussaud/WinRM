@@ -14,10 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with WinRM.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.xebialabs.deployit.hostsession.cifs.winrm.exception;
+package com.xebialabs.winrm;
 
-public class InvalidFilePathRuntimeException extends RuntimeException {
-	public InvalidFilePathRuntimeException(String key, String file) {
-		super(String.format("the file %s set by the %s property does not exist", file, key));
+
+public enum SoapAction {
+
+	COMMAND_LINE("CommandLine"), RECEIVE("Receive"), SIGNAL("Signal"), SHELL("Shell");
+
+	private final String value;
+
+	SoapAction(String value) {
+		this.value = value;
+	}
+
+	public String getValue() {
+		return value;
 	}
 }

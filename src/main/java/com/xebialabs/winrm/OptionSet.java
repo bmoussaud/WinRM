@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with WinRM.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.xebialabs.deployit.hostsession.cifs.winrm;
+package com.xebialabs.winrm;
 
 import com.google.common.collect.Lists;
 import org.dom4j.DocumentHelper;
@@ -22,8 +22,6 @@ import org.dom4j.Element;
 import org.dom4j.QName;
 
 import java.util.List;
-
-import static com.xebialabs.deployit.hostsession.cifs.winrm.WinRMURI.NS_WSMAN_DMTF;
 
 /**
  */
@@ -40,9 +38,9 @@ public enum OptionSet {
 	}
 
 	public Element getElement() {
-		final Element optionSet = DocumentHelper.createElement(QName.get("OptionSet", NS_WSMAN_DMTF));
+		final Element optionSet = DocumentHelper.createElement(QName.get("OptionSet", WinRMURI.NS_WSMAN_DMTF));
 		for (KeyValuePair p : keyValuePairs) {
-			optionSet.addElement(QName.get("Option", NS_WSMAN_DMTF)).addAttribute("Name", p.getKey()).addText(p.getValue());
+			optionSet.addElement(QName.get("Option", WinRMURI.NS_WSMAN_DMTF)).addAttribute("Name", p.getKey()).addText(p.getValue());
 		}
 		return optionSet;
 	}

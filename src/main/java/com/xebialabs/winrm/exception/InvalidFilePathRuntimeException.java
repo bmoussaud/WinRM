@@ -14,23 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with WinRM.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.xebialabs.deployit.hostsession.cifs.winrm;
+package com.xebialabs.winrm.exception;
 
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.QName;
-
-public enum ResourceURI {
-
-	RESOURCE_URI_CMD("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/cmd");
-
-	private final String uri;
-
-	ResourceURI(String uri) {
-		this.uri = uri;
-	}
-
-	public Element getElement() {
-		return DocumentHelper.createElement(QName.get("ResourceURI", WinRMURI.NS_WSMAN_DMTF)).addAttribute("mustUnderstand", "true").addText(uri);
+public class InvalidFilePathRuntimeException extends RuntimeException {
+	public InvalidFilePathRuntimeException(String key, String file) {
+		super(String.format("the file %s set by the %s property does not exist", file, key));
 	}
 }

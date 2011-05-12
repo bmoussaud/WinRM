@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with WinRM.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.xebialabs.deployit.hostsession.cifs.winrm;
+package com.xebialabs.winrm;
 
-import com.xebialabs.deployit.hostsession.cifs.winrm.exception.BlankValueRuntimeException;
-import com.xebialabs.deployit.hostsession.cifs.winrm.exception.InvalidFilePathRuntimeException;
-import com.xebialabs.deployit.hostsession.cifs.winrm.exception.WinRMRuntimeIOException;
+import com.xebialabs.winrm.exception.BlankValueRuntimeException;
+import com.xebialabs.winrm.exception.InvalidFilePathRuntimeException;
+import com.xebialabs.winrm.exception.WinRMRuntimeIOException;
 import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;

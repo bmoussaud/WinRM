@@ -14,10 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with WinRM.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.xebialabs.deployit.hostsession.cifs.winrm;
+package com.xebialabs.winrm;
 
+public class KeyValuePair {
+	final String key;
+	final String value;
 
-public interface TokenGenerator {
+	public KeyValuePair(String key, String value) {
+		this.key = key;
+		this.value = value;
+	}
 
-	public String generateToken();
+	public String getKey() {
+		return key;
+	}
+
+	public String getValue() {
+		return value;
+	}
 }

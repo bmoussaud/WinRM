@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with WinRM.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.xebialabs.deployit.hostsession.cifs.winrm;
+package com.xebialabs.winrm;
 
 import com.google.common.collect.Lists;
-import com.xebialabs.deployit.hostsession.cifs.winrm.exception.WinRMRuntimeIOException;
+import com.xebialabs.winrm.exception.WinRMRuntimeIOException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

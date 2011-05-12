@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with WinRM.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.xebialabs.deployit.hostsession.cifs.winrm;
+package com.xebialabs.winrm;
 
-import com.xebialabs.deployit.hostsession.cifs.winrm.exception.WinRMRuntimeIOException;
+import com.xebialabs.winrm.exception.WinRMRuntimeIOException;
 import org.apache.commons.codec.binary.Base64;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -33,8 +33,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
-
-import static com.xebialabs.deployit.hostsession.cifs.winrm.WinRMURI.*;
 
 //import org.apache.commons.httpclient.Credentials;
 //import org.apache.commons.httpclient.NTCredentials;
@@ -124,8 +122,8 @@ public class WinRMClient {
 		if (commandId == null)
 			return;
 		logger.debug("cleanUp shellId {} commandId {} ", shellId, commandId);
-		final Element bodyContent = DocumentHelper.createElement(QName.get("Signal", NS_WIN_SHELL)).addAttribute("CommandId", commandId);
-		bodyContent.addElement(QName.get("Code", NS_WIN_SHELL)).addText("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/signal/terminate");
+		final Element bodyContent = DocumentHelper.createElement(QName.get("Signal", WinRMURI.NS_WIN_SHELL)).addAttribute("CommandId", commandId);
+		bodyContent.addElement(QName.get("Code", WinRMURI.NS_WIN_SHELL)).addText("http://schemas.microsoft.com/wbem/wsman/1/windows/shell/signal/terminate");
 		final Document requestDocument = getRequestDocument(Action.WS_SIGNAL, ResourceURI.RESOURCE_URI_CMD, null, shellId, bodyContent);
 		Document responseDocument = sendMessage(requestDocument, SoapAction.SIGNAL);
 
@@ -133,8 +131,8 @@ public class WinRMClient {
 
 	private void getCommandOutput() {
 		logger.debug("getCommandOutput shellId {} commandId {} ", shellId, commandId);
-		final Element bodyContent = DocumentHelper.createElement(QName.get("Receive", NS_WIN_SHELL));
-		bodyContent.addElement(QName.get("DesiredStream", NS_WIN_SHELL)).addAttribute("CommandId", commandId).addText("stdout stderr");
+		final Element bodyContent = DocumentHelper.createElement(QName.get("Receive", WinRMURI.NS_WIN_SHELL));
+		bodyContent.addElement(QName.get("DesiredStream", WinRMURI.NS_WIN_SHELL)).addAttribute("CommandId", commandId).addText("stdout stderr");
 		final Document requestDocument = getRequestDocument(Action.WS_RECEIVE, ResourceURI.RESOURCE_URI_CMD, null, shellId, bodyContent);
 
 		for (; ;) {
@@ -197,7 +195,7 @@ public class WinRMClient {
 
 	private String runCommand(String command) {
 		logger.debug("runCommand shellId {} command {}", shellId, command);
-		final Element bodyContent = DocumentHelper.createElement(QName.get("CommandLine", NS_WIN_SHELL));
+		final Element bodyContent = DocumentHelper.createElement(QName.get("CommandLine", WinRMURI.NS_WIN_SHELL));
 
 		String encoded = command;
 		if (!command.startsWith("\""))
@@ -208,7 +206,7 @@ public class WinRMClient {
 
 		logger.info("Encoded command is {}", encoded);
 
-		bodyContent.addElement(QName.get("Command", NS_WIN_SHELL)).addText(encoded);
+		bodyContent.addElement(QName.get("Command", WinRMURI.NS_WIN_SHELL)).addText(encoded);
 
 		final Document requestDocument = getRequestDocument(Action.WS_COMMAND, ResourceURI.RESOURCE_URI_CMD, OptionSet.RUN_COMMAND, shellId, bodyContent);
 		Document responseDocument = sendMessage(requestDocument, SoapAction.COMMAND_LINE);
@@ -229,9 +227,9 @@ public class WinRMClient {
 	private String openShell() {
 		logger.debug("openShell");
 
-		final Element bodyContent = DocumentHelper.createElement(QName.get("Shell", NS_WIN_SHELL));
-		bodyContent.addElement(QName.get("InputStreams", NS_WIN_SHELL)).addText("stdin");
-		bodyContent.addElement(QName.get("OutputStreams", NS_WIN_SHELL)).addText("stdout stderr");
+		final Element bodyContent = DocumentHelper.createElement(QName.get("Shell", WinRMURI.NS_WIN_SHELL));
+		bodyContent.addElement(QName.get("InputStreams", WinRMURI.NS_WIN_SHELL)).addText("stdin");
+		bodyContent.addElement(QName.get("OutputStreams", WinRMURI.NS_WIN_SHELL)).addText("stdout stderr");
 
 
 		final Document requestDocument = getRequestDocument(Action.WS_ACTION, ResourceURI.RESOURCE_URI_CMD, OptionSet.OPEN_SHELL, null, bodyContent);
@@ -247,10 +245,10 @@ public class WinRMClient {
 
 	private Document getRequestDocument(Action action, ResourceURI resourceURI, OptionSet optionSet, String shelId, Element bodyContent) {
 		Document doc = DocumentHelper.createDocument();
-		final Element envelope = doc.addElement(QName.get("Envelope", NS_SOAP_ENV));
+		final Element envelope = doc.addElement(QName.get("Envelope", WinRMURI.NS_SOAP_ENV));
 		envelope.add(getHeader(action, resourceURI, optionSet, shelId));
 
-		final Element body = envelope.addElement(QName.get("Body", NS_SOAP_ENV));
+		final Element body = envelope.addElement(QName.get("Body", WinRMURI.NS_SOAP_ENV));
 
 		if (bodyContent != null)
 			body.add(bodyContent);
@@ -260,18 +258,18 @@ public class WinRMClient {
 
 
 	private Element getHeader(Action action, ResourceURI resourceURI, OptionSet optionSet, String shellId) {
-		final Element header = DocumentHelper.createElement(QName.get("Header", NS_SOAP_ENV));
-		header.addElement(QName.get("To", NS_ADDRESSING)).addText(targetURL.toString());
-		final Element replyTo = header.addElement(QName.get("ReplyTo", NS_ADDRESSING));
-		replyTo.addElement(QName.get("Address", NS_ADDRESSING)).addAttribute("mustUnderstand", "true").addText("http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous");
-		header.addElement(QName.get("MaxEnvelopeSize", NS_WSMAN_DMTF)).addAttribute("mustUnderstand", "true").addText("" + envelopSize);
-		header.addElement(QName.get("MessageID", NS_ADDRESSING)).addText(getUUID());
-		header.addElement(QName.get("Locale", NS_WSMAN_DMTF)).addAttribute("mustUnderstand", "false").addAttribute("xml:lang", locale);
-		header.addElement(QName.get("DataLocale", NS_WSMAN_MSFT)).addAttribute("mustUnderstand", "false").addAttribute("xml:lang", locale);
-		header.addElement(QName.get("OperationTimeout", NS_WSMAN_DMTF)).addText(timeout);
+		final Element header = DocumentHelper.createElement(QName.get("Header", WinRMURI.NS_SOAP_ENV));
+		header.addElement(QName.get("To", WinRMURI.NS_ADDRESSING)).addText(targetURL.toString());
+		final Element replyTo = header.addElement(QName.get("ReplyTo", WinRMURI.NS_ADDRESSING));
+		replyTo.addElement(QName.get("Address", WinRMURI.NS_ADDRESSING)).addAttribute("mustUnderstand", "true").addText("http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous");
+		header.addElement(QName.get("MaxEnvelopeSize", WinRMURI.NS_WSMAN_DMTF)).addAttribute("mustUnderstand", "true").addText("" + envelopSize);
+		header.addElement(QName.get("MessageID", WinRMURI.NS_ADDRESSING)).addText(getUUID());
+		header.addElement(QName.get("Locale", WinRMURI.NS_WSMAN_DMTF)).addAttribute("mustUnderstand", "false").addAttribute("xml:lang", locale);
+		header.addElement(QName.get("DataLocale", WinRMURI.NS_WSMAN_MSFT)).addAttribute("mustUnderstand", "false").addAttribute("xml:lang", locale);
+		header.addElement(QName.get("OperationTimeout", WinRMURI.NS_WSMAN_DMTF)).addText(timeout);
 		header.add(action.getElement());
 		if (shellId != null) {
-			header.addElement(QName.get("SelectorSet", NS_WSMAN_DMTF)).addElement(QName.get("Selector", NS_WSMAN_DMTF)).addAttribute("Name", "ShellId").addText(shellId);
+			header.addElement(QName.get("SelectorSet", WinRMURI.NS_WSMAN_DMTF)).addElement(QName.get("Selector", WinRMURI.NS_WSMAN_DMTF)).addAttribute("Name", "ShellId").addText(shellId);
 		}
 		header.add(resourceURI.getElement());
 		if (optionSet != null) {
