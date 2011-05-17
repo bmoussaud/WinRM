@@ -65,3 +65,6 @@ More information {http://support.microsoft.com/kb/555092}
 
 # Thanks #
 * ZendChild to provide me a ruby implementation and wise advices https://github.com/zenchild/WinRM
+* JNA and http://code.google.com/p/jnaerator/ mvn clean com.jnaerator:maven-jnaerator-plugin:jnaerate
+http://download.oracle.com/docs/cd/E19963-01/html/819-2145/gssclient-3.html
+http://download.oracle.com/docs/cd/E19082-01/819-2145/overview-22/index.html

@@ -1,0 +1,10 @@
+-package com.xebialabs.winrm.gssapi
+-gccLong
+-runtime BridJ
+
+-library gssapi
+	src/header/gssapi/gssapi.h
+
+-noComp
+-noJar
+-I  src/header/gssapi

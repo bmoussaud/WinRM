@@ -31,7 +31,7 @@
 	<logger name="org.apache.http.impl" level="debug"/>
 	<logger name="org.apache.http" level="debug"/>
 	<logger name="jcifs" level="debug"/>
-	<root level="info">
+	<root level="debug">
 		<appender-ref ref="STDOUT" />
 	</root>
 
