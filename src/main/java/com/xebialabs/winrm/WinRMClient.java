@@ -70,14 +70,14 @@ public class WinRMClient {
 	private final HttpConnector connector;
 
 	public WinRMClient(String host, int port, String username, String password) {
-		connector = new JdkHttpConnector(host, port, username, password);
-		targetURL = getURL(host, port);
+		connector = new JdkHttpConnector(host, port, username, password, JdkHttpConnector.Protocol.HTTPS);
+		targetURL = connector.getURL();
 	}
 
 	private URL getURL(String host, int port) {
 		try {
 			//Only http is supported....
-			return new URL("http", host, port, "/wsman");
+			return new URL("https", host, port, "/wsman");
 		} catch (MalformedURLException e) {
 			throw new WinRMRuntimeIOException("Cannot build a new URL using host " + host + " and port " + port, e);
 		}

@@ -27,6 +27,7 @@ import org.dom4j.io.XMLWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -37,28 +38,46 @@ import java.net.URLConnection;
  */
 public class JdkHttpConnector implements HttpConnector {
 
+	public enum Protocol {
+		HTTP, HTTPS;
+
+		public String get() {
+			return toString().toLowerCase();
+		}
+	}
+
 	private final URL targetURL;
 
 	private final TokenGenerator tokenGenerator;
 
+	private final Protocol protocol;
+
 	enum AuthenticationMode {
 		BASIC, KERBEROS
 
-	};
+	}
+
+	;
 
 	private AuthenticationMode authenticationMode = AuthenticationMode.KERBEROS;
 
 
-	public JdkHttpConnector(String host, int port, String username, String password) {
+	public JdkHttpConnector(String host, int port, String username, String password, Protocol protocol) {
+		this.protocol = protocol;
 		targetURL = getURL(host, port);
+		logger.debug("target URL is " + targetURL);
 		tokenGenerator = new KerberosTokenGenerator(host, username, password);
+	}
+
+	public JdkHttpConnector(String host, int port, String username, String password) {
+		this(host, port, username, password, Protocol.HTTP);
 	}
 
 
 	private URL getURL(String host, int port) {
 		try {
 			//Only http is supported....
-			return new URL("http", host, port, "/wsman");
+			return new URL(protocol.get(), host, port, "/wsman");
 		} catch (MalformedURLException e) {
 			throw new WinRMRuntimeIOException("Cannot build a new URL using host " + host + " and port " + port, e);
 		}
@@ -70,6 +89,23 @@ public class JdkHttpConnector implements HttpConnector {
 		try {
 			final URLConnection urlConnection = targetURL.openConnection();
 			HttpURLConnection con = (HttpURLConnection) urlConnection;
+
+			if (con instanceof HttpsURLConnection) {
+				HttpsURLConnection sslConn = (HttpsURLConnection) con;
+
+				/*SSLSocketFactory factory =
+						(SSLSocketFactory) properties.get("SSLSocketFactory");
+
+				X509TrustManager tm =
+						(X509TrustManager) properties.get("X509TrustManager");
+
+				HostnameVerifier verifier =
+						(HostnameVerifier) properties.get("HostnameVerifier");
+
+				X509KeyManager km =
+						(X509KeyManager) properties.get("X509KeyManager"); */
+
+			}
 			con.setDoInput(true);
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
@@ -115,16 +151,18 @@ public class JdkHttpConnector implements HttpConnector {
 			responseDocument = DocumentHelper.parseText(text);
 			return responseDocument;
 
-		}
-		catch (BlankValueRuntimeException bvrte) {
+		} catch (BlankValueRuntimeException bvrte) {
 			throw bvrte;
-		}
-		catch (InvalidFilePathRuntimeException ifprte ) {
+		} catch (InvalidFilePathRuntimeException ifprte) {
 			throw ifprte;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new WinRMRuntimeIOException("send message on " + targetURL + " error ", requestDocument, responseDocument, e);
 		}
+	}
+
+	@Override
+	public URL getURL() {
+		return targetURL;
 	}
 
 

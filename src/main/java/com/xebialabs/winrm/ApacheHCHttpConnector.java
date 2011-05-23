@@ -158,6 +158,11 @@ public class ApacheHCHttpConnector implements HttpConnector {
 		}
 	}
 
+	@Override
+	public URL getURL() {
+		return targetURL;
+	}
+
 	private String toString(Document doc) {
 		StringWriter stringWriter = new StringWriter();
 		XMLWriter xmlWriter = new XMLWriter(stringWriter, OutputFormat.createPrettyPrint());

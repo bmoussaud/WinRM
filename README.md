@@ -44,11 +44,22 @@ In addition to the requirements for Deployit, the Dictionary Plugin has the foll
 	* the '.deployit.local' and 'deployit.local' by your domain name
 
 More information {http://support.microsoft.com/kb/555092}
+Alternate configuration:
+* java.security.krb5.realm defines the default_realm
+* java.security.krb5.kdc defines the kdc ( key domain controller ?) of the default realm
 
 
 3. Add the following property to the JVM -Djava.security.auth.login.config=/path/to/login.conf
 4. Add the following property to the JVM -Djava.security.krb5.conf=/path/to/krb5.conf
 5. Add the following property to the JVM -Djavax.security.auth.useSubjectCredsOnly=false
+
+Note: if java.security.krb5.conf is not defined, Sun implementation will search in file named krb5.conf
+- $(java.home}/lib/security/
+- Windows c:/winnt/ or${WindowHome}
+- SunOS: /etc/krb5/krb5.conf
+- Linux: /etc/krb5.conf
+- MacOs: $(user.home)/Library/Preferences/edu.mit.Kerberos, /Library/Preferences/edu.mit.Kerberos, /etc/krb5.conf
+
 
 
 # Known Limitations #

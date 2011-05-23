@@ -25,6 +25,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.Security;
+
 import static junit.framework.Assert.*;
 
 public class WinRMClientItest {
@@ -66,6 +68,16 @@ public class WinRMClientItest {
 	public void testWinRMClient() {
 
 		WinRMClient client = new WinRMClient(server, port, username, password);
+		client.runCmd("ipconfig");
+		assertEquals(0, client.getExitCode());
+		assertEquals(1, client.getChunk());
+		assertTrue(client.getStdout().toString().contains("172.16.74.129"));
+	}
+
+	@Test
+	public void testWinRMClientHttps() {
+		Security.setProperty("ssl.SocketFactory.provider", LazySSLSocketFactory.class.getName());
+		WinRMClient client = new WinRMClient(server, port+1, username, password);
 		client.runCmd("ipconfig");
 		assertEquals(0, client.getExitCode());
 		assertEquals(1, client.getChunk());
