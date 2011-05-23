@@ -24,5 +24,5 @@ import java.net.URL;
 public interface HttpConnector {
 	Document sendMessage(Document requestDocument, SoapAction soapAction);
 
-	URL getURL();
+	URL getTargetURL();
 }

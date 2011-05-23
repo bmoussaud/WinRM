@@ -1,4 +1,4 @@
-package com.xebialabs.winrm;
+package com.xebialabs.winrm.connector;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLContext;
@@ -20,7 +20,7 @@ public class LazySSLSocketFactory extends SSLSocketFactory {
 					null, // No KeyManager required
 					new TrustManager[]{new LazyTrustManager()},
 					new java.security.SecureRandom());
-			factory = (SSLSocketFactory) sslcontext.getSocketFactory();
+			factory = sslcontext.getSocketFactory();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

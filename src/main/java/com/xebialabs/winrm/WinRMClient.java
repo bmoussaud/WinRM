@@ -29,19 +29,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
-//import org.apache.commons.httpclient.Credentials;
-//import org.apache.commons.httpclient.NTCredentials;
-
 
 public class WinRMClient {
 
-	public static final int DEFAULT_HTTP_PORT = 5985;
-	public static final int DEFAULT_HTTPS_PORT = 5986;
 
 	private static final String DEFAULT_TIMEOUT = "PT60.000S";
 	private static final int DEFAULT_MAX_ENV_SIZE = 153600;
@@ -55,7 +49,6 @@ public class WinRMClient {
 	//default en-US
 	private String locale = DEFAULT_LOCALE;
 
-	//private final HttpClient httpclient;
 	private final URL targetURL;
 
 	private final StringBuffer stdout = new StringBuffer();
@@ -69,19 +62,11 @@ public class WinRMClient {
 
 	private final HttpConnector connector;
 
-	public WinRMClient(String host, int port, String username, String password) {
-		connector = new JdkHttpConnector(host, port, username, password, JdkHttpConnector.Protocol.HTTPS);
-		targetURL = connector.getURL();
+	public WinRMClient(WinRMHost host) {
+		connector =   HttpConnectorFactory.newHttpConnector(host);
+		targetURL = connector.getTargetURL();
 	}
 
-	private URL getURL(String host, int port) {
-		try {
-			//Only http is supported....
-			return new URL("https", host, port, "/wsman");
-		} catch (MalformedURLException e) {
-			throw new WinRMRuntimeIOException("Cannot build a new URL using host " + host + " and port " + port, e);
-		}
-	}
 
 	public void runCmd(String... commandLine) {
 		StringBuffer cmd = new StringBuffer();
@@ -135,7 +120,7 @@ public class WinRMClient {
 		bodyContent.addElement(QName.get("DesiredStream", WinRMURI.NS_WIN_SHELL)).addAttribute("CommandId", commandId).addText("stdout stderr");
 		final Document requestDocument = getRequestDocument(Action.WS_RECEIVE, ResourceURI.RESOURCE_URI_CMD, null, shellId, bodyContent);
 
-		for (; ;) {
+		for (; ; ) {
 			Document responseDocument = sendMessage(requestDocument, SoapAction.RECEIVE);
 			stdout.append(handleStream(responseDocument, ResponseExtractor.STDOUT));
 			stderr.append(handleStream(responseDocument, ResponseExtractor.STDERR));

@@ -1,4 +1,4 @@
-package com.xebialabs.winrm;
+package com.xebialabs.winrm.connector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

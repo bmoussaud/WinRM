@@ -25,30 +25,23 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.security.Security;
-
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 public class WinRMClientItest {
 
 	private static Logger logger = LoggerFactory.getLogger(WinRMClientItest.class);
 
 	static final String DEFAULT_SERVER = "WIN-2MGY3RY6XSH.deployit.local";
-	static final int DEFAULT_PORT = 5985;
+	static final int DEFAULT_PORT = WinRMHost.DEFAULT_HTTP_PORT;
 	static final String DEFAULT_USERNAME = "hilversum";
 	static final String DEFAULT_PASSWORD = "Xe%%bia";
 
-	private String server;
-	private int port;
-	private String username;
-	private String password;
+	private WinRMHost host;
 
 	@Before
 	public void setup() {
-		server = DEFAULT_SERVER;
-		port = DEFAULT_PORT;
-		username = DEFAULT_USERNAME;
-		password = DEFAULT_PASSWORD;
+		host = new WinRMHost(DEFAULT_SERVER, DEFAULT_PORT, DEFAULT_USERNAME, DEFAULT_PASSWORD);
 
 		System.setProperty("java.security.krb5.conf", "src/main/resources/krb5.conf");
 		System.setProperty("java.security.auth.login.config", "src/main/resources/login.conf");
@@ -61,13 +54,29 @@ public class WinRMClientItest {
 		System.setProperty("java.security.krb5.conf", "");
 		System.setProperty("java.security.auth.login.config", "");
 		System.setProperty("javax.security.auth.useSubjectCredsOnly", "");
-
 	}
 
 	@Test
 	public void testWinRMClient() {
+		WinRMClient client = newWinRMClient();
+		client.runCmd("ipconfig");
+		assertEquals(0, client.getExitCode());
+		assertEquals(1, client.getChunk());
+		assertTrue(client.getStdout().toString().contains("172.16.74.129"));
+	}
 
-		WinRMClient client = new WinRMClient(server, port, username, password);
+	private WinRMClient newWinRMClient() {
+		return new WinRMClient(host);
+	}
+
+
+	@Test
+	public void testWinRMClientHttps() {
+		//sudo keytool -import -keystore src/test/resources/key/cacerts -alias WIN-2MGY3RY6XSH -file src/test/resources/key/remote.host.pem
+		System.setProperty("javax.net.ssl.trustStore", "src/test/resources/key/cacerts");
+		host.setPort(WinRMHost.DEFAULT_HTTPS_PORT);
+		host.setProtocol(Protocol.HTTPS);
+		WinRMClient client = newWinRMClient();
 		client.runCmd("ipconfig");
 		assertEquals(0, client.getExitCode());
 		assertEquals(1, client.getChunk());
@@ -75,9 +84,12 @@ public class WinRMClientItest {
 	}
 
 	@Test
-	public void testWinRMClientHttps() {
-		Security.setProperty("ssl.SocketFactory.provider", LazySSLSocketFactory.class.getName());
-		WinRMClient client = new WinRMClient(server, port+1, username, password);
+	public void testWinRMClientFakeHttps() {
+
+		//Security.setProperty("ssl.SocketFactory.provider", LazySSLSocketFactory.class.getName());
+		host.setPort(WinRMHost.DEFAULT_HTTPS_PORT);
+		host.setProtocol(Protocol.HTTPS_LAZY);
+		WinRMClient client = newWinRMClient();
 		client.runCmd("ipconfig");
 		assertEquals(0, client.getExitCode());
 		assertEquals(1, client.getChunk());
@@ -90,7 +102,7 @@ public class WinRMClientItest {
 
 		tearDown();
 
-		WinRMClient client = new WinRMClient(server, port, username, password);
+		WinRMClient client = newWinRMClient();
 		client.runCmd("ipconfig");
 	}
 
@@ -100,7 +112,7 @@ public class WinRMClientItest {
 
 		System.setProperty("java.security.auth.login.config", "/not/exist/file.conf");
 
-		WinRMClient client = new WinRMClient(server, port, username, password);
+		WinRMClient client = newWinRMClient();
 		client.runCmd("ipconfig");
 	}
 
@@ -111,7 +123,7 @@ public class WinRMClientItest {
 
 		System.setProperty("java.security.krb5.conf", "");
 
-		WinRMClient client = new WinRMClient(server, port, username, password);
+		WinRMClient client = newWinRMClient();
 		client.runCmd("ipconfig");
 	}
 
@@ -122,26 +134,14 @@ public class WinRMClientItest {
 
 		System.setProperty("java.security.krb5.conf", "/path/to/nowhere/file.conf");
 
-		WinRMClient client = new WinRMClient(server, port, username, password);
+		WinRMClient client = newWinRMClient();
 		client.runCmd("ipconfig");
 	}
 
 
-	//only http & basic auth is supported
-	//@Test(expected = RuntimeException.class)
-	public void testWinRMClientSecure() {
-		try {
-			WinRMClient client = new WinRMClient(server, 443, username, password);
-			client.runCmd("ipconfig");
-			assertFalse(false);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Test
 	public void testWinRMClientWrongCommandLine() {
-		WinRMClient client = new WinRMClient(server, port, username, password);
+		WinRMClient client = newWinRMClient();
 		client.runCmd("ifconfig");
 		assertEquals(1, client.getExitCode());
 		assertEquals(1, client.getChunk());
@@ -151,7 +151,7 @@ public class WinRMClientItest {
 
 	@Test
 	public void testWinRMClientVerboseDir() {
-		WinRMClient client = new WinRMClient(server, port, username, password);
+		WinRMClient client = newWinRMClient();
 		client.runCmd("dir", "/s ");
 		assertEquals(0, client.getExitCode());
 		assertTrue(client.getChunk() > 1);

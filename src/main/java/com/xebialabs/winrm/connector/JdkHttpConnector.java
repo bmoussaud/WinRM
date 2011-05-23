@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with WinRM.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.xebialabs.winrm;
+package com.xebialabs.winrm.connector;
 
+import com.xebialabs.winrm.*;
 import com.xebialabs.winrm.exception.BlankValueRuntimeException;
 import com.xebialabs.winrm.exception.InvalidFilePathRuntimeException;
 import com.xebialabs.winrm.exception.WinRMRuntimeIOException;
@@ -27,10 +28,8 @@ import org.dom4j.io.XMLWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.*;
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -38,49 +37,13 @@ import java.net.URLConnection;
  */
 public class JdkHttpConnector implements HttpConnector {
 
-	public enum Protocol {
-		HTTP, HTTPS;
-
-		public String get() {
-			return toString().toLowerCase();
-		}
-	}
-
 	private final URL targetURL;
 
 	private final TokenGenerator tokenGenerator;
 
-	private final Protocol protocol;
-
-	enum AuthenticationMode {
-		BASIC, KERBEROS
-
-	}
-
-	;
-
-	private AuthenticationMode authenticationMode = AuthenticationMode.KERBEROS;
-
-
-	public JdkHttpConnector(String host, int port, String username, String password, Protocol protocol) {
-		this.protocol = protocol;
-		targetURL = getURL(host, port);
-		logger.debug("target URL is " + targetURL);
-		tokenGenerator = new KerberosTokenGenerator(host, username, password);
-	}
-
-	public JdkHttpConnector(String host, int port, String username, String password) {
-		this(host, port, username, password, Protocol.HTTP);
-	}
-
-
-	private URL getURL(String host, int port) {
-		try {
-			//Only http is supported....
-			return new URL(protocol.get(), host, port, "/wsman");
-		} catch (MalformedURLException e) {
-			throw new WinRMRuntimeIOException("Cannot build a new URL using host " + host + " and port " + port, e);
-		}
+	public JdkHttpConnector(WinRMHost host) {
+		targetURL = host.getTargetURL();
+		tokenGenerator =  host.getTokenGenerator();
 	}
 
 	@Override
@@ -90,26 +53,11 @@ public class JdkHttpConnector implements HttpConnector {
 			final URLConnection urlConnection = targetURL.openConnection();
 			HttpURLConnection con = (HttpURLConnection) urlConnection;
 
-			if (con instanceof HttpsURLConnection) {
-				HttpsURLConnection sslConn = (HttpsURLConnection) con;
-
-				/*SSLSocketFactory factory =
-						(SSLSocketFactory) properties.get("SSLSocketFactory");
-
-				X509TrustManager tm =
-						(X509TrustManager) properties.get("X509TrustManager");
-
-				HostnameVerifier verifier =
-						(HostnameVerifier) properties.get("HostnameVerifier");
-
-				X509KeyManager km =
-						(X509KeyManager) properties.get("X509KeyManager"); */
-
-			}
 			con.setDoInput(true);
 			con.setDoOutput(true);
 			con.setRequestMethod("POST");
 			con.setRequestProperty("Content-Type", "application/soap+xml; charset=UTF-8");
+
 			final String authToken = tokenGenerator.generateToken();
 			if (authToken != null)
 				con.addRequestProperty("Authorization", authToken);
@@ -161,7 +109,7 @@ public class JdkHttpConnector implements HttpConnector {
 	}
 
 	@Override
-	public URL getURL() {
+	public URL getTargetURL() {
 		return targetURL;
 	}
 

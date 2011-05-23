@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.security.PrivilegedAction;
 
 /**
-
+ *
  */
 public class KerberosTokenGenerator implements TokenGenerator {
 
@@ -94,7 +94,7 @@ public class KerberosTokenGenerator implements TokenGenerator {
 				BufferedReader in = new BufferedReader(new FileReader(configurationFile));
 				String str;
 				while ((str = in.readLine()) != null) {
-					logger.debug("{} {}", key,str);
+					logger.debug("{} {}", key, str);
 				}
 				in.close();
 			} catch (IOException e) {

@@ -14,9 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with WinRM.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.xebialabs.winrm;
+package com.xebialabs.winrm.connector;
 
 import com.google.common.collect.Lists;
+import com.xebialabs.winrm.HttpConnector;
+import com.xebialabs.winrm.SoapAction;
 import com.xebialabs.winrm.exception.WinRMRuntimeIOException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
@@ -51,9 +53,6 @@ public class ApacheHCHttpConnector implements HttpConnector {
 
 	private final HttpClient httpclient;
 	private final URL targetURL;
-
-
-
 
 	public ApacheHCHttpConnector(String host, int port, String username, String password) {
 		httpclient = initialize(host, port, username, password);
@@ -159,7 +158,7 @@ public class ApacheHCHttpConnector implements HttpConnector {
 	}
 
 	@Override
-	public URL getURL() {
+	public URL getTargetURL() {
 		return targetURL;
 	}
 
