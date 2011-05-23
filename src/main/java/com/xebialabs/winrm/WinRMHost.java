@@ -1,6 +1,7 @@
 package com.xebialabs.winrm;
 
 import com.xebialabs.winrm.exception.WinRMRuntimeIOException;
+import com.xebialabs.winrm.tokengenerator.KerberosTokenGenerator;
 
 import java.io.Serializable;
 import java.net.MalformedURLException;
