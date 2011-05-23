@@ -24,13 +24,11 @@
 		</encoder>
 	</appender>
 
-	<logger name="com.xebialabs" level="info" />
 	<logger name="org.reflections" level="error" />
-	<logger name="com.xebialabs.deployit.hostsession" level="debug"/>
 	<logger name="com.xebialabs.winrm" level="debug"/>
 	<logger name="org.apache.http.impl" level="debug"/>
 	<logger name="org.apache.http" level="debug"/>
-	<logger name="jcifs" level="debug"/>
+
 	<root level="debug">
 		<appender-ref ref="STDOUT" />
 	</root>

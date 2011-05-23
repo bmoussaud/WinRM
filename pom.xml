@@ -41,9 +41,7 @@
 					<excludes>
 						<exclude>**/package/**</exclude>
 						<exclude>.idea/**</exclude>
-						<exclude>deployit*</exclude>
 						<exclude>**/*.conf</exclude>
-						<exclude>**/*.war</exclude>
 						<exclude>**/*.md</exclude>
 						<exclude>**/*.h</exclude>
 						<exclude>**/*.jnaerator</exclude>
