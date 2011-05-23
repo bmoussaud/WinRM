@@ -37,13 +37,17 @@
 					<encoding>${sourceEncoding}</encoding>
 					<aggregate>true</aggregate>
 					<header>src/etc/gpl-header.txt</header>
+					<strictCheck>true</strictCheck>
 					<excludes>
 						<exclude>**/package/**</exclude>
 						<exclude>.idea/**</exclude>
 						<exclude>deployit*</exclude>
-						<exclude>**/*.artifact</exclude>
+						<exclude>**/*.conf</exclude>
 						<exclude>**/*.war</exclude>
 						<exclude>**/*.md</exclude>
+						<exclude>**/*.h</exclude>
+						<exclude>**/*.jnaerator</exclude>
+						<exclude>src/test/resources/key/*</exclude>
 
 						<!-- skip XML Velocity templates because the plugin adds a blank line
 											  after the comment, and that doesn't work if first line is supposed to
