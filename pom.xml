@@ -43,6 +43,7 @@
 						<exclude>deployit*</exclude>
 						<exclude>**/*.artifact</exclude>
 						<exclude>**/*.war</exclude>
+						<exclude>**/*.md</exclude>
 
 						<!-- skip XML Velocity templates because the plugin adds a blank line
 											  after the comment, and that doesn't work if first line is supposed to

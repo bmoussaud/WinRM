@@ -1,8 +1,13 @@
+% WinRM Setup and configuration
+%
+% Mai, 2011
+
 # Simple Setup
+This manual describes how to set up and to configuration a WinRM server.
 
-winrm quickconfig
-winrm qc
-
+# Simple Setup
+		winrm quickconfig
+		winrm qc
 
 # Usefull commands
 * Dump Winrm config

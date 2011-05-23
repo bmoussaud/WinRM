@@ -1,15 +1,16 @@
-% WinRM Plugin Manual
+% WinRM Library Manual
 %
 % Mai, 2011
 
 # Preface #
 
-This manual describes the WinRM plugin.
+This manual describes the WinRM Library.
 
 # Introduction #
 
 The Windows Remote Management (WinRM) is the Microsoft implementation of WS-Management Protocol, a standard Simple Object Access Protocol (SOAP)-based, firewall-friendly protocol that allows hardware and operating systems, from different vendors, to interoperate.
-This plugin allows Deployit to become a WinRM client to run remote commands on the server.
+
+This library allows anay java program to become a WinRM client to run commands on a remote server configured with WinRM.
 
 # HTTPS Configuration
 Two HTTPS configurations are available
@@ -51,6 +52,7 @@ Two HTTPS configurations are available
 * Define this keystore as the trustore
         -Djavax.net.ssl.trustStore=src/test/resources/key/cacerts
 
+Reference (In French) http://blog.ippon.fr/2008/10/20/certificats-auto-signe-et-communication-ssl-en-java/
 
 # Kerberos Configuration
 1. Create (or edit) the JAAS configuration file. Add the following entry
