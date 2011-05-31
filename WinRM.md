@@ -79,7 +79,7 @@ Usefull links:
 
 		winrm qc -transport:https
 
-  If you have an error (for example this one, use the manual installation)
+            If you have an error (for example this one, use the manual installation)
 
         C:\itest>winrm qc -transport:https
         WinRM already is set up to receive requests on this machine.
