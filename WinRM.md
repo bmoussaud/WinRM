@@ -31,9 +31,10 @@ This manual describes how to set up and to configuration a WinRM server.
 
 6. Don't forget to configure the firewall.
 
+
 # Winrm and Https
-_If you really need this_
-Don't forget the username & password are transmitted using encrypted security protocol (Kerberos).
+
+_If you really need this_ Don't forget the username & password are transmitted using encrypted security protocol (Kerberos).
 
 1. Checking listeners
 
