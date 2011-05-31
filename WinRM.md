@@ -95,16 +95,18 @@ Usefull links:
         Cannot create a WinRM listener on HTTPS because this machine does not have an appropriate certificate. To be used for SSL, a certificate must h
         ave a CN matching the hostname, be appropriate for Server Authentication, and not be expired, revoked, or self-signed.
 
-* Manual with an Administrator powershell
-        PS C:\Windows\system32> winrm create winrm/config/Listener?Address=*+Transport=HTTPS `@`{Hostname=`"`WIN-2MGY3RY6XSH.deployit.local`"`; CertificateThumbprint=`"`5C36B638BC31F505EF7F693D9A60C01551DD486F`"`}
-        ResourceCreated
-            Address = http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous
-            ReferenceParameters
-            ResourceURI = http://schemas.microsoft.com/wbem/wsman/1/config/listener
-            SelectorSet
-                Selector: Address = *, Transport = HTTPS
+* Manual with an powershell run as Administrator:
+
+		PS C:\Windows\system32> winrm create winrm/config/Listener?Address=*+Transport=HTTPS `@`{Hostname=`"`WIN-2MGY3RY6XSH.deployit.local`"`; CertificateThumbprint=`"`5C36B638BC31F505EF7F693D9A60C01551DD486F`"`}
+		ResourceCreated
+			Address = http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous
+			ReferenceParameters
+			ResourceURI = http://schemas.microsoft.com/wbem/wsman/1/config/listener
+			SelectorSet
+				Selector: Address = *, Transport = HTTPS
 
 * Check you have an HTTPS listener
+
         PS C:\Windows\system32> winrm enumerate winrm/config/listener
         Listener
             Address = *
@@ -125,6 +127,8 @@ Usefull links:
             URLPrefix = wsman
             CertificateThumbprint = 5C36B638BC31F505EF7F693D9A60C01551DD486F
             ListeningOn = 127.0.0.1, 172.16.74.129, ::1, fe80::5efe:172.16.74.129%16, fe80::6c46:386d:27be:2b29%10
+
+
 * Don't forget to configure the firewall.
 
 # Useful links
