@@ -75,8 +75,7 @@ Usefull links:
 		[Thumbprint]
 		  5C36B638BC31F505EF7F693D9A60C01551DD486F
 
-3. Create an HTTPS listener
-* Automatic - with a non-self signed certificate that match perfectly your hostname
+3. Create an HTTPS listener automaticly using a non-self signed certificate that match perfectly your hostname
 
 		winrm qc -transport:https
 
@@ -95,7 +94,7 @@ Usefull links:
         Cannot create a WinRM listener on HTTPS because this machine does not have an appropriate certificate. To be used for SSL, a certificate must h
         ave a CN matching the hostname, be appropriate for Server Authentication, and not be expired, revoked, or self-signed.
 
-* Manual with an powershell run as Administrator:
+4. Create an HTTPS listener manualy with an powershell run as Administrator:
 
 		PS C:\Windows\system32> winrm create winrm/config/Listener?Address=*+Transport=HTTPS `@`{Hostname=`"`WIN-2MGY3RY6XSH.deployit.local`"`; CertificateThumbprint=`"`5C36B638BC31F505EF7F693D9A60C01551DD486F`"`}
 		ResourceCreated
@@ -105,7 +104,7 @@ Usefull links:
 			SelectorSet
 				Selector: Address = *, Transport = HTTPS
 
-* Check you have an HTTPS listener
+5. Check you have an HTTPS listener
 
         PS C:\Windows\system32> winrm enumerate winrm/config/listener
         Listener
