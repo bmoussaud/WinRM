@@ -123,3 +123,6 @@ Usefull links:
             CertificateThumbprint = 5C36B638BC31F505EF7F693D9A60C01551DD486F
             ListeningOn = 127.0.0.1, 172.16.74.129, ::1, fe80::5efe:172.16.74.129%16, fe80::6c46:386d:27be:2b29%10
 * Don't forget to configure the firewall.
+
+# Useful links
+* http://www.symantec.com/business/support/index?page=content&id=TECH156625

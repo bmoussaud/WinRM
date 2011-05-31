@@ -120,3 +120,6 @@ Note: if java.security.krb5.conf is not defined, Sun implementation will search 
 * JNA and http://code.google.com/p/jnaerator/ mvn clean com.jnaerator:maven-jnaerator-plugin:jnaerate
 http://download.oracle.com/docs/cd/E19963-01/html/819-2145/gssclient-3.html
 http://download.oracle.com/docs/cd/E19082-01/819-2145/overview-22/index.html
+
+
+http://cr.openjdk.java.net/~weijun/special/krb5winguide-2/raw_files/new/kwin
