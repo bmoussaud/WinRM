@@ -1,6 +1,7 @@
 % WinRM Setup and configuration
 %
 % May, 2011
+* Benoit Moussaud.
 
 # Simple Setup
 This manual describes how to set up and to configuration a WinRM server.
