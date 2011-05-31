@@ -1,32 +1,40 @@
 % WinRM Setup and configuration
 %
-% Mai, 2011
+% May, 2011
 
 # Simple Setup
 This manual describes how to set up and to configuration a WinRM server.
 
-# Simple Setup
+# Basic Setup
 		winrm quickconfig
 		winrm qc
 
-# Usefull commands
-* Dump Winrm config
-		winrm get winrm/config
+# Basic Winrm configuration compatible with WinRM Java Cli
 
-* Allowing all hosts to connect to winrm
-		winrm set winrm/config/client @{TrustedHosts="*"}
+1. Create a new winrm listener on the target machine by running the command from a command prompt.
 
-* Allowing some host to connect to Winrm
-        winrm set winrm/config/client @{TrustedHosts="system1,system2..."}
+		winrm create winrm/config/listener?Address=*+Transport=HTTP
 
-* Allowing uncrypted content exchange
-		winrm set winrm/config/service  @{AllowUnencrypted="true"}
+2. Configure the winrm listener on the target machine to permit executed command to be executed using HTTP by running the command from a command prompt.
 
-* Enumerate listeners
-		winrm e winrm/config/listener
+		winrm set winrm/config/service @{AllowUnencrypted="true"}
 
+3. Configure the winrm listener on the target machine to use kerberos authentication by running the command from a command prompt.
+
+		winrm set winrm/config/service/Auth @{Keberos="true"}
+
+4. Configure the winrm listener on the targer machine to not use basic authentication by running the command from a command prompt.
+
+	winrm set winrm/config/service/Auth @{Basic="false"}
+
+5. Enable 'Kerberos DES encryption'options in AD on all accounts used with Winrm Java Cli.
+
+6. Don't forget to configure the firewall.
 
 # Winrm and Https
+_If you really need this_
+Don't forget the username & password are transmitted using encrypted security protocol (Kerberos).
+
 1. Checking listeners
 
         C:\>winrm enumerate winrm/config/listener
@@ -128,7 +136,27 @@ Usefull links:
             ListeningOn = 127.0.0.1, 172.16.74.129, ::1, fe80::5efe:172.16.74.129%16, fe80::6c46:386d:27be:2b29%10
 
 
-* Don't forget to configure the firewall.
+
+
+
+# Usefull commands
+
+* Dump Winrm config
+		winrm get winrm/config
+
+* Allowing all hosts to connect to winrm
+		winrm set winrm/config/client @{TrustedHosts="*"}
+
+* Allowing some host to connect to Winrm
+        winrm set winrm/config/client @{TrustedHosts="system1,system2..."}
+
+* Allowing uncrypted content exchange
+		winrm set winrm/config/service  @{AllowUnencrypted="true"}
+
+* Enumerate listeners
+		winrm e winrm/config/listener
+
+
 
 # Useful links
 * http://www.symantec.com/business/support/index?page=content&id=TECH156625
