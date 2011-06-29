@@ -26,7 +26,7 @@ This manual describes how to set up and to configuration a WinRM server.
 
 4. Configure the winrm listener on the targer machine to not use basic authentication by running the command from a command prompt.
 
-	winrm set winrm/config/service/Auth @{Basic="false"}
+	winrm set winrm/config/service/Auth @{Basic="true"}
 
 5. Enable 'Kerberos DES encryption'options in AD on all accounts used with Winrm Java Cli.
 

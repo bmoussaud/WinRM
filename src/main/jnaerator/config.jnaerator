@@ -1,4 +1,4 @@
--package com.xebialabs.winrm.gssapi
+-package com.xebialabs.overthere.winrm.winrm.gssapi
 -gccLong
 -runtime BridJ
 
